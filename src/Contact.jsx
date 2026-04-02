@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./Contact.css";
+import axios from "axios";
 
 const Contact = () => {
   const [data, setData] = useState({
@@ -40,14 +41,18 @@ const Contact = () => {
     setData({ ...data, [name]: value });
   };
 
-  const saveform = (e) => {
-    e.preventDefault();
+  const saveform = async (e) => {
+  e.preventDefault();
 
-    const isConfirmed = window.confirm("Are you sure you want to submit?");
+  const isConfirmed = window.confirm("Are you sure you want to submit?");
 
-    if (isConfirmed) {
-      alert("Congrats! Your form was successfully submitted 🎉");
-      console.log(data);
+  if (!isConfirmed) return; // ❌ cancel केलं तर stop
+
+  try {
+    const res = await axios.post("http://localhost:5000/api/contact", data,{ withCredentials: true });
+
+    if (res.data.success) {
+      alert("🎉 Form submitted successfully!");
 
       setData({
         fname: "",
@@ -58,7 +63,11 @@ const Contact = () => {
         msg: "",
       });
     }
-  };
+  } catch (err) {
+    console.log(err.response?.data || err.message);
+    alert("❌ Error submitting form");
+  }
+};
 
   return (
     <section className="contact-section" ref={sectionRef}>
