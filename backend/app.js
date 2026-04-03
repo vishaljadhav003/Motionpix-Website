@@ -11,6 +11,7 @@ const io = new Server(server);
 
 // 🔥 SOCKET GLOBAL
 app.set("io", io);
+app.set("trust proxy", 1);
 
 // 🔐 SESSION
 app.use(
@@ -34,7 +35,7 @@ app.use((req, res, next) => {
 app.use(cors({
   origin: [
   "http://localhost:5173",
-  "https://www.motionpixindia.com"
+  "https://motionpixpuneindia.netlify.app"
 ],
 credentials: true
 }));

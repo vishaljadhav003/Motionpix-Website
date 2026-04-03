@@ -39,6 +39,38 @@ router.post("/login", (req, res) => {
   });
 });
 
+const fetch = require("node-fetch");
+router.post("/chat", async (req, res) => {
+  const { message } = req.body;
+
+  try {
+    console.log("Message:", message);
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: message }]
+      })
+    });
+
+    const data = await response.json();
+
+    console.log("OpenAI:", data);
+
+    res.json({
+      reply: data.choices?.[0]?.message?.content || "No reply from AI"
+    });
+
+  } catch (err) {
+    console.log("Chat error:", err);
+    res.json({ reply: "Server error" });
+  }
+});
 // Logout
 router.get("/logout", (req, res) => {
   req.session.destroy();

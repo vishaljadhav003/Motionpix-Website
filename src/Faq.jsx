@@ -58,11 +58,10 @@ const Faq = () => {
     trackEvent("CHAT_MESSAGE_SENT", input);
 
     try {
-      const res = await fetch("/api/chat", {
+     const res = await fetch("http://localhost:5000/api/chat",  {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input })
-      });
+        body: JSON.stringify({ message: input })      });
 
       const data = await res.json();
 
@@ -150,8 +149,8 @@ const Faq = () => {
 
       {/* CHATBOT */}
       <div className={`chatbot ${chatOpen ? "open" : ""} ${
-    hideChatbot ? "hide" : ""
-  }`}>
+        hideChatbot ? "hide" : ""
+      }`}>
         <button className="chat-toggle" onClick={() => setChatOpen(!chatOpen)}>
           🦉
         </button>
