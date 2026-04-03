@@ -35,6 +35,7 @@ import TestCasesPage from "./TestCasesPage";
 import Home from "./Home";
 import Loader from "./Loader";
 import { useEffect, useState } from "react";
+import Chatbot from "./Chatbot";
 
 const App = () => {
    const [showIntro, setShowIntro] = useState(true);
@@ -73,6 +74,7 @@ const App = () => {
         <Route path="/about" element={<About/>} />
         <Route path="/services" element={<ServicesPage/>} />
 
+
          <Route path="/services/2d-animation" element={<Animation2D />} />
         <Route path="/services/3d-animation" element={<Animation3D />} />
         <Route path="/services/web-design" element={<WebsiteDesign />} />
@@ -98,6 +100,7 @@ const App = () => {
         <Route path="/contact" element={<Contact/>}/>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+      <Chatbot/>
       <Footer/>
     </Router>
   );
