@@ -114,6 +114,7 @@ const Career = () => {
   message: "",
   resume: null,
 });
+const fileRef = useRef();
 
 const [success, setSuccess] = useState(false);
 const [selectedJob, setSelectedJob] = useState(null);
@@ -141,28 +142,55 @@ const [selectedJob, setSelectedJob] = useState(null);
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
-  console.log("Career Form Data:", {
-    ...form,
-    resumeName: form.resume?.name,
+
+  if (!form.resume) {
+    alert("Please upload resume");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("name", form.name);
+  formData.append("email", form.email);
+  formData.append("role", form.role);
+  formData.append("message", form.message);
+  formData.append("resume", form.resume);
+
+  try {
+    const res = await fetch("http://localhost:5000/api/career", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) throw new Error("Server error");
+
+    const data = await res.json();
+if (data.success) {
+  setSuccess(true);
+
+  setForm({
+    name: "",
+    email: "",
+    role: "",
+    message: "",
+    resume: null,
   });
 
-  setSuccess(true);
+  // 🔥 file input reset
+  if (fileRef.current) {
+    fileRef.current.value = "";
+  }
 
   setTimeout(() => {
     setSuccess(false);
-    setForm({
-      name: "",
-      email: "",
-      role: "",
-      message: "",
-      resume: null,
-    });
-  }, 3500);
+  }, 3000);
+}
+  } catch (err) {
+    console.log("Error:", err);
+  }
 };
-
 
 const handleFileChange = (e) => {
   setForm({ ...form, resume: e.target.files[0] });
@@ -305,10 +333,12 @@ const handleFileChange = (e) => {
           {/* RESUME UPLOAD */}
           <label className="upload-box">
             <input className="fw-bold"
+              ref={fileRef}
               type="file"
+              name="resume"
               accept=".pdf,.doc,.docx"
               onChange={handleFileChange}
-              required
+             
             />
             <span className="fw-bold">
               {form.resume ? form.resume.name : "Upload Resume (PDF/DOC)"}

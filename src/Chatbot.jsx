@@ -26,7 +26,7 @@ const Chatbot = () => {
   const intervalRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
   const pausedRef = useRef(false);
-
+  const [speaking, setSpeaking] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("chat");
@@ -63,14 +63,35 @@ const Chatbot = () => {
       setInput(e.results[0][0].transcript);
     };
   };
+const speak = (text) => {
+  if (!voiceOn) return;
 
-  const speak = (text) => {
-    if (!voiceOn) return;
-    window.speechSynthesis.cancel();
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.rate = 1;
-    window.speechSynthesis.speak(speech);
-  };
+  window.speechSynthesis.cancel();
+
+  const speech = new SpeechSynthesisUtterance(text);
+
+  // 🌍 Better detection
+  if (/[\u0900-\u097F]/.test(text)) {
+    speech.lang = text.includes("आहे") ? "mr-IN" : "hi-IN";
+  } else if (/kya|hai|tum|kaise/i.test(text)) {
+    speech.lang = "hi-IN";
+  } else {
+    speech.lang = "en-US";
+  }
+
+  const voices = window.speechSynthesis.getVoices();
+  speech.voice =
+    voices.find(v => v.lang === speech.lang) ||
+    voices[0];
+
+  speech.rate = 1;
+  speech.pitch = 1.1;
+
+  speech.onstart = () => setSpeaking(true);
+  speech.onend = () => setSpeaking(false);
+
+  window.speechSynthesis.speak(speech);
+};
 
   const copyText = (text) => {
   navigator.clipboard.writeText(text);
@@ -227,6 +248,14 @@ const handleReaction = (index, type) => {
                 <p>Online</p>
               </div>
             </div>
+
+            {voiceOn && (
+              <div className="waveform">
+                <span className={speaking ? "active" : ""}></span>
+                <span className={speaking ? "active" : ""}></span>
+                <span className={speaking ? "active" : ""}></span>
+              </div>
+            )}
 
             <div className="actions">
               <button onClick={() => setVoiceOn(!voiceOn)}>

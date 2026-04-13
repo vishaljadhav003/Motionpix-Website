@@ -116,7 +116,6 @@ exports.createContact = async (req, res) => {
           from: `"MotionPix" <${process.env.EMAIL_USER}>`,
           to: email,
           subject: "Inquiry Received ✨ – MotionPix",
-        subject: "✨ Inquiry Received – MotionPix",
           html: `
             <h2 style="color:#333;">Hello ${fname},</h2>
 

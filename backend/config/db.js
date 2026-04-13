@@ -5,6 +5,7 @@ const db = mysql.createConnection({
   user: "root",
   password: "", // तुझा mysql password
   database: "motionpix",
+  port:3306
 });
 
 db.connect((err) => {

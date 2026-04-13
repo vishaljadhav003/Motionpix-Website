@@ -5,16 +5,16 @@ const session = require("express-session");
 const http = require("http");
 const { Server } = require("socket.io");
 require("dotenv").config();
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// 🔥 SOCKET GLOBAL
+// SOCKET GLOBAL
 app.set("io", io);
 app.set("trust proxy", 1);
 
-
-// 🔐 SESSION
+// ✅ SESSION (ONLY ONCE)
 app.use(
   session({
     secret: "secret123",
@@ -23,48 +23,46 @@ app.use(
     cookie: {
       httpOnly: true,
       sameSite: "lax",
-      secure: false, // 🔥 CHANGE THIS
+      secure: false, // production मध्ये true
     },
   })
 );
 
-// 🔐 CACHE FIX (IMPORTANT FOR BACK BUTTON LOGIN ISSUE)
+// ✅ CACHE FIX
 app.use((req, res, next) => {
-  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  res.set("Cache-Control", "no-store");
   next();
 });
+
+// CORS
 app.use(cors({
   origin: [
-  "http://localhost:5173",
-  "https://motionpixpuneindia.netlify.app"
-],
-credentials: true
+    "http://localhost:5173",
+    "https://motionpixpuneindia.netlify.app"
+  ],
+  credentials: true
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// VIEW ENGINE
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static("uploads"));
 
 // ROUTES
 const contactRoutes = require("./routes/contactRoutes");
-app.use("/api", contactRoutes);
+const careerRoutes = require("./routes/careerRoutes");
 
-// 🔐 AUTH GUARD (IMPORTANT)
-function isAuth(req, res, next) {
-  if (req.session && req.session.isAuth) {
-    return next();
-  }
-  return res.redirect("/api/login");
-}
+app.use("/api", contactRoutes);
+app.use("/api", careerRoutes);
 
 // HOME
 app.get("/", (req, res) => {
   res.redirect("/api/admin");
 });
-
-
 
 // SOCKET
 io.on("connection", (socket) => {
@@ -75,6 +73,7 @@ io.on("connection", (socket) => {
   });
 });
 
+// START
 server.listen(5000, () => {
   console.log("Server running on http://localhost:5000 🚀");
 });

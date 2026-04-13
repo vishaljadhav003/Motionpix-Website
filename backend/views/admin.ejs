@@ -261,6 +261,10 @@ socket.on("newContact", (data) => {
 <!-- HEADER -->
 <div class="header">
   <h4>🚀 MotionPix Admin</h4>
+  <div class="mb-3">
+  <a href="/api/admin" class="btn btn-primary">📩 Contact</a>
+  <a href="/api/admin/careers" class="btn btn-warning">💼 Careers</a>
+</div>
 
   <div class="d-flex gap-2">
       <button id="themeBtn" onclick="toggleTheme()" class="btn btn-dark">
@@ -331,7 +335,7 @@ socket.on("newContact", (data) => {
            name="search"
            placeholder="Search by name/email..."
            value="<%= search %>"
-           class="form-control pe-5">
+           class="form-control pe-5 fw-bold">
 
     <!-- ❌ CLEAR BUTTON -->
     <span id="clearBtn"
@@ -343,7 +347,7 @@ socket.on("newContact", (data) => {
   </div>
 
   <div class="col-md-3">
-    <select name="status" class="form-control">
+    <select name="status" class="form-control fw-bold">
       <option value="">All</option>
       <option value="pending" <%= status==='pending'?'selected':'' %>>Pending</option>
       <option value="completed" <%= status==='completed'?'selected':'' %>>Completed</option>
@@ -351,7 +355,7 @@ socket.on("newContact", (data) => {
   </div>
 
   <div class="col-md-2">
-    <button class="btn btn-primary w-100">Search</button>
+    <button class="btn btn-primary w-100 fw-bold">Search</button>
   </div>
 </form>
 
@@ -360,7 +364,7 @@ socket.on("newContact", (data) => {
 <!-- 📊 ANALYTICS CARD -->
 <div class="card p-4 mb-4">
 
-  <div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">-
     <div>
       <h5 class="mb-0">📊 Analytics Overview</h5>
       <small class="text-muted">Real-time inquiry insights</small>
@@ -380,7 +384,7 @@ socket.on("newContact", (data) => {
 <div class="table-responsive">
 
 <table class="table table-dark table-hover align-middle">
-<thead>
+<thead>-
 <tr>
   <th>#</th>
   <th>Name</th>
@@ -395,26 +399,26 @@ socket.on("newContact", (data) => {
 <tbody id="tableData">
 <% data.forEach((item,index)=>{ %>
 <tr>
-  <td><%= index+1 %></td>
-  <td><%= item.fname %> <%= item.lname %></td>
-  <td><%= item.email %></td>
-  <td><%= item.services %></td>
-  <td style=" 
+  <td class="fw-bold"><%= index+1 %></td>
+  <td class="fw-bold"><%= item.fname %> <%= item.lname %></td>
+  <td class="fw-bold"><%= item.email %></td>
+  <td class="fw-bold"><%= item.services %></td>
+  <td class="fw-bold" style=" 
   max-width: 200px;
   word-wrap: break-word;
   white-space: normal;
   word-break: break-word;
 "><%= item.msg %></td>
 
-  <td>
+  <td class="fw-bold">
     <% if(item.status==='pending'){ %>
-      <span class="badge-pending">Pending</span>
+      <span class="badge-pending fw-bold">Pending</span>
     <% } else { %>
-      <span class="badge-completed">Completed</span>
+      <span class="badge-completed fw-bold">Completed</span>
     <% } %>
   </td>
 
-  <td>
+  <td class="fw-bold">
     <% if(item.status==='pending'){ %>
       <a href="/api/complete/<%= item.id %>" class="btn btn-success btn-action">✔</a>
     <% } %>
@@ -514,5 +518,4 @@ window.addEventListener("load", toggleClearBtn);
 </script>
 
 </body>
-
 </html>
