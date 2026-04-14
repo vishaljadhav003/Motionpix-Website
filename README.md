@@ -16,3 +16,17 @@ The React Compiler is not enabled on this template because of its impact on dev 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
 Create a .env file and add:
 OPENAI_API_KEY=your_key_here
+
+
+
+
+
+| Style       | Director     | Key Technique             |
+| ----------- | ------------ | ------------------------- |
+| Realism     | Satyajit Ray | Natural acting, real life |
+| Montage     | Eisenstein   | Editing = meaning         |
+| Suspense    | Hitchcock    | POV shots                 |
+| New Wave    | Godard       | Jump cuts                 |
+| Slow Cinema | Tarkovsky    | Long takes                |
+| Stylized    | Wes Anderson | Symmetry                  |
+| Indian Mass | Rajamouli    | Grand visuals             |
